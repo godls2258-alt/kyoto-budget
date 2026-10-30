@@ -1,0 +1,684 @@
+<title>가을 교토 가계부</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: single-column editorial zine — warm cream ground, momiji-red accents,
+     a proportion bar up top, then category cards, food broken out by day. */
+  :root {
+    --bg: #FBF4EA;
+    --surface: #FFFFFF;
+    --surface-2: #F6ECDD;
+    --fg: #2B2320;
+    --muted: #8A7B6B;
+    --line: #E7D8C4;
+    --accent: #B83F24;      /* 단풍 감 (persimmon) */
+    --accent-2: #C98A2B;    /* 은행 노랑 */
+    --matcha: #6E7B3D;      /* 말차 */
+    --rose: #B9637A;        /* 쇼핑 (dusty rose) */
+    --taupe: #9C8C78;
+    --shadow: 0 1px 3px rgba(60,40,20,.07), 0 8px 24px rgba(60,40,20,.05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1A1512;
+      --surface: #241D18;
+      --surface-2: #2C2218;
+      --fg: #F0E6D8;
+      --muted: #A99A86;
+      --line: #3A2E24;
+      --accent: #E0694A;
+      --accent-2: #E0A848;
+      --matcha: #9DAC63;
+      --rose: #D18AA0;
+      --taupe: #B6A690;
+      --shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1A1512;
+    --surface: #241D18;
+    --surface-2: #2C2218;
+    --fg: #F0E6D8;
+    --muted: #A99A86;
+    --line: #3A2E24;
+    --accent: #E0694A;
+    --accent-2: #E0A848;
+    --matcha: #9DAC63;
+    --rose: #D18AA0;
+    --taupe: #B6A690;
+    --shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Noto Sans KR", -apple-system, "Apple SD Gothic Neo", sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 0;
+  }
+  .serif { font-family: "Nanum Myeongjo", "Noto Serif KR", serif; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ---- hero ---- */
+  .hero {
+    text-align: center;
+    padding-block: 54px 36px;
+  }
+  .hero .eyebrow {
+    font-size: 12px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0 0 14px;
+  }
+  .hero h1 {
+    font-family: "Nanum Myeongjo", "Noto Serif KR", serif;
+    font-weight: 800;
+    font-size: clamp(30px, 8vw, 46px);
+    line-height: 1.25;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .hero .leaf { color: var(--accent); }
+  .hero .sub {
+    margin: 16px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .hero .handle {
+    display: inline-block;
+    margin-top: 6px;
+    font-weight: 700;
+    color: var(--fg);
+    font-size: 14px;
+  }
+
+  .total-card {
+    background: linear-gradient(135deg, var(--accent), #8f2f18);
+    color: #fff;
+    border-radius: 22px;
+    padding: 30px 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .total-card::after {
+    content: "🍁";
+    position: absolute;
+    font-size: 120px;
+    right: -24px;
+    bottom: -40px;
+    opacity: .14;
+    transform: rotate(-12deg);
+  }
+  .total-card .label {
+    font-size: 13px;
+    letter-spacing: .18em;
+    opacity: .9;
+    margin: 0;
+  }
+  .total-card .big {
+    font-family: "Nanum Myeongjo", "Noto Serif KR", serif;
+    font-weight: 800;
+    font-size: clamp(38px, 11vw, 58px);
+    margin: 6px 0 2px;
+    letter-spacing: -.01em;
+  }
+  .total-card .big small { font-size: .42em; font-weight: 700; opacity: .85; }
+  .total-card .note { font-size: 13px; opacity: .88; margin: 4px 0 0; }
+
+  .fx {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 14px 0 0;
+  }
+  .fx b { color: var(--fg); font-weight: 700; }
+
+  /* ---- section heading ---- */
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 48px 0 18px;
+  }
+  .sec-head .kicker {
+    font-size: 12px;
+    letter-spacing: .2em;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .sec-head h2 {
+    font-family: "Nanum Myeongjo", "Noto Serif KR", serif;
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  /* ---- proportion bar ---- */
+  .prop {
+    display: flex;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .prop span { display: block; height: 100%; }
+
+  .breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: var(--shadow);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 10px;
+    border-radius: 10px;
+  }
+  .row + .row { border-top: 1px solid var(--line); }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .row .nm { font-size: 14.5px; font-weight: 600; }
+  .row .pct { font-size: 12px; color: var(--muted); margin-left: 7px; font-weight: 400; }
+  .row .amt { font-size: 14.5px; font-weight: 700; }
+  .row .bar {
+    grid-column: 2 / 4;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--surface-2);
+    overflow: hidden;
+    margin-top: 2px;
+  }
+  .row .bar i { display: block; height: 100%; border-radius: 3px; }
+
+  /* ---- quick stats ---- */
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .stat .k { font-size: 12.5px; color: var(--muted); margin: 0 0 6px; }
+  .stat .v { font-family: "Nanum Myeongjo","Noto Serif KR",serif; font-size: 24px; font-weight: 800; margin: 0; }
+  .stat .v small { font-size: 13px; font-weight: 700; }
+
+  /* ---- category cards ---- */
+  .cat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-top: 14px;
+  }
+  .cat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .cat-top .t { display: flex; align-items: center; gap: 10px; }
+  .cat-top .emoji { font-size: 22px; }
+  .cat-top .name { font-weight: 800; font-size: 17px; }
+  .cat-top .sum {
+    font-family: "Nanum Myeongjo","Noto Serif KR",serif;
+    font-weight: 800; font-size: 19px;
+  }
+  .cat-stripe { height: 4px; border-radius: 2px; margin: -6px 0 14px; }
+
+  .items { display: flex; flex-direction: column; gap: 0; }
+  .item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 0;
+    border-top: 1px dashed var(--line);
+    font-size: 14px;
+  }
+  .item:first-child { border-top: none; }
+  .item .d { min-width: 0; }
+  .item .d .tag { color: var(--muted); font-size: 12px; }
+  .item .p { text-align: right; white-space: nowrap; flex-shrink: 0; }
+  .item .p .won { font-weight: 700; }
+  .item .p .yen { color: var(--muted); font-size: 12px; margin-left: 7px; }
+
+  .daygroup { margin-top: 4px; }
+  .daybar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 18px 0 8px;
+    padding-bottom: 7px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .daybar:first-child { margin-top: 0; }
+  .daybar .dl {
+    font-family: "Nanum Myeongjo","Noto Serif KR",serif;
+    font-weight: 800; font-size: 16px; color: var(--accent);
+    letter-spacing: .02em;
+  }
+  .daybar .dt { font-size: 13px; font-weight: 700; }
+  .daybar .dt .yen { color: var(--muted); font-size: 11.5px; font-weight: 400; margin-left: 6px; }
+
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--muted);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ---- callout note ---- */
+  .callout {
+    margin-top: 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--fg);
+  }
+  .callout .hd {
+    display: block;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: .02em;
+  }
+  .callout b { font-weight: 700; }
+
+  /* ---- itinerary links ---- */
+  .links { display: flex; flex-direction: column; gap: 10px; }
+  .linkcard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 15px 18px;
+    box-shadow: var(--shadow);
+    transition: transform .12s ease, border-color .12s ease;
+  }
+  .linkcard:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .linkcard .lc-l { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .linkcard .ig { font-size: 20px; flex-shrink: 0; }
+  .linkcard .lc-t { font-weight: 700; font-size: 15px; }
+  .linkcard .lc-s { font-size: 12px; color: var(--muted); }
+  .linkcard .go { font-size: 13px; font-weight: 700; color: var(--accent); white-space: nowrap; flex-shrink: 0; }
+  .linkcard.soon {
+    pointer-events: none;
+    border-style: dashed;
+    box-shadow: none;
+    background: var(--surface-2);
+  }
+  .linkcard.soon .lc-t { color: var(--muted); }
+  .linkcard.soon .go { color: var(--muted); }
+
+  /* ---- footer ---- */
+  .foot {
+    margin: 46px 0 56px;
+    padding: 22px;
+    background: var(--surface-2);
+    border-radius: 16px;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+  .foot .mark {
+    font-family: "Nanum Myeongjo","Noto Serif KR",serif;
+    font-weight: 800;
+    color: var(--fg);
+    font-size: 15px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .foot .mark .leaf { color: var(--accent); }
+
+  @media (max-width: 380px) {
+    .stats { grid-template-columns: 1fr; }
+    .item .p .yen { display: block; margin-left: 0; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap">
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Autumn in Kyoto · 4N 5D</p>
+    <h1>가을 <span class="leaf">교토</span><br>4박 5일 가계부</h1>
+    <p class="sub">2025년 가을 · 1인 기준 혼자 여행<br>
+      여행일자 : 2025년 11월 28일 ~ 12월 2일<br>
+      <span class="handle">@haeniivel · 해니블</span>
+    </p>
+  </header>
+
+  <div class="total-card">
+    <p class="label">총 여행 경비</p>
+    <p class="big num">1,362,961<small>원</small></p>
+    <p class="note">4박 5일, 약 136만 원 ✈️🍁</p>
+  </div>
+  <p class="fx">환율 기준 <b>100엔 = 940원</b> (1엔 ≈ 9.4원)</p>
+
+  <!-- ======= 한눈에 ======= -->
+  <div class="sec-head">
+    <span class="kicker">Overview</span>
+    <h2>어디에 얼마 썼을까</h2>
+  </div>
+
+  <div class="prop" aria-hidden="true">
+    <span style="width:35.0%;background:var(--accent)"></span>
+    <span style="width:22.9%;background:var(--accent-2)"></span>
+    <span style="width:19.8%;background:#8f4a2e"></span>
+    <span style="width:8.1%;background:var(--matcha)"></span>
+    <span style="width:6.7%;background:#4f6b6e"></span>
+    <span style="width:6.9%;background:var(--rose)"></span>
+    <span style="width:0.6%;background:var(--taupe)"></span>
+  </div>
+
+  <div class="breakdown">
+    <div class="row">
+      <span class="dot" style="background:var(--accent)"></span>
+      <span><span class="nm">🍣 식비</span><span class="pct">35.0%</span></span>
+      <span class="amt num">477,548원</span>
+      <span class="bar"><i style="width:100%;background:var(--accent)"></i></span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:var(--accent-2)"></span>
+      <span><span class="nm">🏨 숙소</span><span class="pct">22.9%</span></span>
+      <span class="amt num">312,000원</span>
+      <span class="bar"><i style="width:65%;background:var(--accent-2)"></i></span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:#8f4a2e"></span>
+      <span><span class="nm">✈️ 항공권</span><span class="pct">19.8%</span></span>
+      <span class="amt num">270,000원</span>
+      <span class="bar"><i style="width:56.5%;background:#8f4a2e"></i></span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:var(--matcha)"></span>
+      <span><span class="nm">🎫 입장·관광</span><span class="pct">8.1%</span></span>
+      <span class="amt num">110,732원</span>
+      <span class="bar"><i style="width:23.2%;background:var(--matcha)"></i></span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:#4f6b6e"></span>
+      <span><span class="nm">🚃 교통비</span><span class="pct">6.7%</span></span>
+      <span class="amt num">91,086원</span>
+      <span class="bar"><i style="width:19.1%;background:#4f6b6e"></i></span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:var(--rose)"></span>
+      <span><span class="nm">🛍️ 쇼핑</span><span class="pct">6.9%</span></span>
+      <span class="amt num">94,075원</span>
+      <span class="bar"><i style="width:19.7%;background:var(--rose)"></i></span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:var(--taupe)"></span>
+      <span><span class="nm">🧾 기타</span><span class="pct">0.5%</span></span>
+      <span class="amt num">7,520원</span>
+      <span class="bar"><i style="width:1.6%;background:var(--taupe)"></i></span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <p class="k">하루 평균</p>
+      <p class="v num">272,592<small>원</small></p>
+    </div>
+    <div class="stat">
+      <p class="k">항공권 + 숙소</p>
+      <p class="v num">582,000<small>원</small></p>
+    </div>
+    <div class="stat">
+      <p class="k">현지 지출</p>
+      <p class="v num">780,961<small>원</small></p>
+    </div>
+    <div class="stat">
+      <p class="k">쇼핑 제외 경비</p>
+      <p class="v num">약 127<small>만원</small></p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="hd">📌 참고해주세요</span>
+    교토에서는 <b>코스요리·미슐랭 식당</b>을 몇 번 경험하면서 식비 지출이 유독 컸어요.
+    그래서 식비가 전체의 35%로 가장 큰 비중을 차지했답니다 :)
+    그리고 <b>모든 식비는 1인 기준</b>이에요. 혼자 여행하면서 쓴 금액 그대로예요!
+  </div>
+
+  <!-- ======= 식비 ======= -->
+  <div class="sec-head">
+    <span class="kicker">Food</span>
+    <h2>🍣 식비 · 477,548원</h2>
+  </div>
+
+  <div class="cat">
+    <div class="daygroup">
+
+      <div class="daybar">
+        <span class="dl">맛집</span>
+        <span class="dt num">311,948원 <span class="yen">33,186엔</span></span>
+      </div>
+      <div class="items">
+        <div class="item"><span class="d">료센 넷플릭스 6코스</span><span class="p"><span class="won num">85,352원</span><span class="yen num">9,080엔</span></span></div>
+        <div class="item"><span class="d">효테이 <span class="tag">교토 가이세키</span></span><span class="p"><span class="won num">51,192원</span><span class="yen num">5,446엔</span></span></div>
+        <div class="item"><span class="d">nishiki 구슬초밥</span><span class="p"><span class="won num">47,000원</span><span class="yen num">5,000엔</span></span></div>
+        <div class="item"><span class="d">토라야 백된장 모츠나베</span><span class="p"><span class="won num">38,352원</span><span class="yen num">4,080엔</span></span></div>
+        <div class="item"><span class="d">우나기 히로카와 우나기동 <span class="tag">예약금 3,000엔 포함</span></span><span class="p"><span class="won num">32,054원</span><span class="yen num">3,410엔</span></span></div>
+        <div class="item"><span class="d">키린 채식뷔페</span><span class="p"><span class="won num">23,500원</span><span class="yen num">2,500엔</span></span></div>
+        <div class="item"><span class="d">고민가 카페 고무스비 오니기리세트</span><span class="p"><span class="won num">19,740원</span><span class="yen num">2,100엔</span></span></div>
+        <div class="item"><span class="d">멘야 유코 슈퍼 스페셜 라멘</span><span class="p"><span class="won num">14,758원</span><span class="yen num">1,570엔</span></span></div>
+      </div>
+
+      <div class="daybar">
+        <span class="dl">카페 · 디저트</span>
+        <span class="dt num">87,138원 <span class="yen">9,270엔</span></span>
+      </div>
+      <div class="items">
+        <div class="item"><span class="d">야마모토 커피 샵 후르츠산도</span><span class="p"><span class="won num">19,740원</span><span class="yen num">2,100엔</span></span></div>
+        <div class="item"><span class="d">ex카페 교토 아라시야마 당고세트</span><span class="p"><span class="won num">17,390원</span><span class="yen num">1,850엔</span></span></div>
+        <div class="item"><span class="d">ONN 화과자 세트</span><span class="p"><span class="won num">16,544원</span><span class="yen num">1,760엔</span></span></div>
+        <div class="item"><span class="d">우메조노 당고 세트</span><span class="p"><span class="won num">11,750원</span><span class="yen num">1,250엔</span></span></div>
+        <div class="item"><span class="d">밤 아이스크림</span><span class="p"><span class="won num">5,640원</span><span class="yen num">600엔</span></span></div>
+        <div class="item"><span class="d">블루보틀 교토</span><span class="p"><span class="won num">5,640원</span><span class="yen num">600엔</span></span></div>
+        <div class="item"><span class="d">마루히 베이커리</span><span class="p"><span class="won num">5,264원</span><span class="yen num">560엔</span></span></div>
+        <div class="item"><span class="d">버밀리언 아메리카노</span><span class="p"><span class="won num">5,170원</span><span class="yen num">550엔</span></span></div>
+      </div>
+
+      <div class="daybar">
+        <span class="dl">편의점</span>
+        <span class="dt num">41,143원 <span class="yen">4,377엔</span></span>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:4px 0 2px">공항 에그산도·음료·아이스크림·주전부리 등 소소하게 :)</p>
+
+      <div class="daybar">
+        <span class="dl">마트</span>
+        <span class="dt num">37,318원 <span class="yen">3,970엔</span></span>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:4px 0 0">숙소에서 먹을 간식·음료 장보기</p>
+
+    </div>
+  </div>
+
+  <!-- ======= 교통 ======= -->
+  <div class="sec-head">
+    <span class="kicker">Transport</span>
+    <h2>🚃 교통비 · 91,086원</h2>
+  </div>
+  <div class="cat">
+    <div class="cat-stripe" style="background:#4f6b6e"></div>
+    <div class="items">
+      <div class="item"><span class="d">간사이공항 ↔ 교토역 하루카 왕복</span><span class="p"><span class="won num">41,360원</span><span class="yen num">4,400엔</span></span></div>
+      <div class="item"><span class="d">이코카 교통카드 <span class="tag">최초 이용액 + 충전 2회</span></span><span class="p"><span class="won num">32,900원</span><span class="yen num">3,500엔</span></span></div>
+      <div class="item"><span class="d">버스&amp;지하철 1일 패스권</span><span class="p"><span class="won num">10,340원</span><span class="yen num">1,100엔</span></span></div>
+      <div class="item"><span class="d">에이잔 열차 <span class="tag">구라마·이치하라 구간</span></span><span class="p"><span class="won num">6,486원</span><span class="yen num">690엔</span></span></div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6">
+      ※ 이코카는 실물카드 대신 <b>아이폰 지갑(Apple Wallet)</b>에 넣어서 썼어요. 충전액은 전부 사용한 걸로 계산했어요 :)<br>
+      ※ <b>에이잔 열차도 교통카드(이코카)로 탑승 가능</b>해요!
+    </p>
+  </div>
+
+  <!-- ======= 관광 ======= -->
+  <div class="sec-head">
+    <span class="kicker">Sightseeing</span>
+    <h2>🎫 입장·관광 · 110,732원</h2>
+  </div>
+  <div class="cat">
+    <div class="cat-stripe" style="background:var(--matcha)"></div>
+    <div class="items">
+      <div class="item"><span class="d">도후쿠지 입장료</span><span class="p"><span class="won num">9,400원</span><span class="yen num">1,000엔</span></span></div>
+      <div class="item"><span class="d">도지 라이트업</span><span class="p"><span class="won num">9,400원</span><span class="yen num">1,000엔</span></span></div>
+      <div class="item"><span class="d">호센인 입장료</span><span class="p"><span class="won num">8,460원</span><span class="yen num">900엔</span></span></div>
+      <div class="item"><span class="d">산젠인 입장료</span><span class="p"><span class="won num">6,580원</span><span class="yen num">700엔</span></span></div>
+      <div class="item"><span class="d">기요미즈데라 주간</span><span class="p"><span class="won num">4,700원</span><span class="yen num">500엔</span></span></div>
+      <div class="item"><span class="d">기요미즈데라 야간</span><span class="p"><span class="won num">4,700원</span><span class="yen num">500엔</span></span></div>
+      <div class="item"><span class="d">무린암 입장료</span><span class="p"><span class="won num">16,920원</span><span class="yen num">1,800엔</span></span></div>
+      <div class="item"><span class="d">에이칸도 입장료</span><span class="p"><span class="won num">9,400원</span><span class="yen num">1,000엔</span></span></div>
+      <div class="item"><span class="d">은각사 입장료</span><span class="p"><span class="won num">4,700원</span><span class="yen num">500엔</span></span></div>
+      <div class="item"><span class="d">난젠지 <span class="tag">수로각 무료 구역만 *</span></span><span class="p"><span class="won num">0원</span><span class="yen num">0엔</span></span></div>
+      <div class="item"><span class="d">유사이테이 입장료</span><span class="p"><span class="won num">28,200원</span><span class="yen num">3,000엔</span></span></div>
+      <div class="item"><span class="d">토롯코 열차 편도</span><span class="p"><span class="won num">8,272원</span><span class="yen num">880엔</span></span></div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6">
+      * 난젠지는 <b>수로각 등 무료 구역</b>은 입장료가 없어요. 난젠인 등 내부 핵심 시설을 관람하려면 <b>입장료 500엔</b>이 있어요. 저는 무료 구역인 수로각만 보고 왔어요 :)
+    </p>
+
+  <!-- ======= 숙소/항공/쇼핑/기타 ======= -->
+  <div class="sec-head">
+    <span class="kicker">Stay & Flight</span>
+    <h2>항공 · 숙소 · 쇼핑</h2>
+  </div>
+
+  <div class="cat">
+    <div class="cat-top">
+      <span class="t"><span class="emoji">✈️</span><span class="name">항공권</span></span>
+      <span class="sum num">270,000원</span>
+    </div>
+    <div class="items">
+      <div class="item"><span class="d">왕복 항공권</span><span class="p"><span class="won num">270,000원</span></span></div>
+    </div>
+  </div>
+
+  <div class="cat">
+    <div class="cat-top">
+      <span class="t"><span class="emoji">🏨</span><span class="name">숙소</span></span>
+      <span class="sum num">312,000원</span>
+    </div>
+    <div class="items">
+      <div class="item"><span class="d">LiVEMAX Hostel <span class="tag">1박</span></span><span class="p"><span class="won num">52,000원</span></span></div>
+      <div class="item"><span class="d">글랜짓 가와라마치 캡슐호텔 <span class="tag">3박</span></span><span class="p"><span class="won num">260,000원</span></span></div>
+    </div>
+  </div>
+
+  <div class="cat">
+    <div class="cat-top">
+      <span class="t"><span class="emoji">🛍️</span><span class="name">쇼핑</span></span>
+      <span class="sum num">94,075원</span>
+    </div>
+    <div class="items">
+      <div class="item"><span class="d">기념품 간식 <span class="tag">녹차 후리카케·말차 쿠키</span></span><span class="p"><span class="won num">35,645원</span><span class="yen num">3,792엔</span></span></div>
+      <div class="item"><span class="d">Kaldi 쇼핑</span><span class="p"><span class="won num">30,259원</span><span class="yen num">3,219엔</span></span></div>
+      <div class="item"><span class="d">마그넷 + 스티커 <span class="tag">키티·토롯코</span></span><span class="p"><span class="won num">20,962원</span><span class="yen num">2,230엔</span></span></div>
+      <div class="item"><span class="d">드럭스토어 <span class="tag">발 지압 패치 등</span></span><span class="p"><span class="won num">7,210원</span><span class="yen num">767엔</span></span></div>
+    </div>
+  </div>
+
+  <div class="cat">
+    <div class="cat-top">
+      <span class="t"><span class="emoji">🧾</span><span class="name">기타</span></span>
+      <span class="sum num">7,520원</span>
+    </div>
+    <div class="items">
+      <div class="item"><span class="d">교토 숙박세 (4박)</span><span class="p"><span class="won num">7,520원</span><span class="yen num">800엔</span></span></div>
+    </div>
+  </div>
+
+  <!-- ======= 일정 링크 ======= -->
+  <div class="sec-head">
+    <span class="kicker">Itinerary</span>
+    <h2>교토 일정이 궁금하다면?</h2>
+  </div>
+  <div class="links">
+    <a class="linkcard" href="https://www.instagram.com/p/DewO-pNGjXh/?img_index=1" target="_blank" rel="noopener">
+      <span class="lc-l">
+        <span class="ig">📸</span>
+        <span><span class="lc-t">1일차</span><br><span class="lc-s">인스타그램에서 보기</span></span>
+      </span>
+      <span class="go">보러가기 →</span>
+    </a>
+    <a class="linkcard" href="https://www.instagram.com/p/De6U2S6mhnI/?img_index=1" target="_blank" rel="noopener">
+      <span class="lc-l">
+        <span class="ig">📸</span>
+        <span><span class="lc-t">2일차 · 1편</span><br><span class="lc-s">인스타그램에서 보기</span></span>
+      </span>
+      <span class="go">보러가기 →</span>
+    </a>
+    <a class="linkcard" href="https://www.instagram.com/p/DfCfkSVmmCY/?img_index=1" target="_blank" rel="noopener">
+      <span class="lc-l">
+        <span class="ig">📸</span>
+        <span><span class="lc-t">2일차 · 2편</span><br><span class="lc-s">인스타그램에서 보기</span></span>
+      </span>
+      <span class="go">보러가기 →</span>
+    </a>
+    <span class="linkcard soon">
+      <span class="lc-l">
+        <span class="ig">🍁</span>
+        <span><span class="lc-t">3 · 4일차</span><br><span class="lc-s">추후 업데이트 예정이에요!</span></span>
+      </span>
+      <span class="go">준비 중</span>
+    </span>
+  </div>
+
+  <footer class="foot">
+    <span class="mark">해니블 <span class="leaf">🍁</span></span>
+    2025년 가을 교토 여행 당시 실제 지출을 바탕으로 작성한 가계부예요.
+    실제 결제 당시 환율에 따라 조금씩 차이가 있을 수 있으니
+    참고용으로 봐주세요 :)<br><br>
+    여행 문의 · haenii97@naver.com · @haeniivel
+  </footer>
+
+</div>
